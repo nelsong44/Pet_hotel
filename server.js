@@ -57,7 +57,7 @@ app.post('/pets', function(req, res){
       res.send( 400 );
       }
     else {
-      var ownerInfo = connection.query('INSERT INTO petData (firstName, lastName) Values ("' + first + '", "' + last + '")');
+      var ownerInfo = connection.query("INSERT INTO petData (firstName, lastName) Values ('" + first + "', '" + last + "' )");
       console.log(ownerInfo);
       done();
       res.send('success');
