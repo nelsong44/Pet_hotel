@@ -15,23 +15,33 @@
         <form>
           <label> Frist Name </label> <input placeholder="first" id="firstName"></input>
           <label> Last Name </label> <input placeholder="last" id="lastName"></input>
-          <button id="register" type='submit'>Register</button>
+          <button id="register" type='button'>Register</button>
         </form>
     </main>
     <div id="container">
       <h2>Pets</h2>
       <label> Owner name </label>
-        <select>
-            <option id='owner1' value='owner 1'>owner1</option>
-            <option id='owner2' value='owner 2'>owner2</option>
-            <option id='owner3' value='owner 3'>owner3</option>
+        <select id="ownerSelect">
+
         </select>
       <label> Pet name </label><input id='pet' placeholder='Pet'></input>
       <label> Breed</label><input id='breed' placeholder='Breed'></input>
       <label> Color</label><input id='color' placeholder='Color'></input>
+      <button type="button" name="addPet">Add Pet</button>
     </div>
     <div id='outPutDiv'>
-      
+      <table id='outPutTable'>
+          <tr>
+            <th>Owner</th>
+            <th>Pet</th>
+            <th>Breed</th>
+            <th>Color</th>
+            <th>Update</th>
+            <th>Delete</th>
+            <th>Check IN/OUT</th>
+          </tr>
+
+      </table>
     </div>
   </body>
 </html>

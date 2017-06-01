@@ -13,8 +13,6 @@ var pool = new pg.Pool( config );
 app.use( express.static( 'public' ) );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
-var petResults = [];
-
 app.listen( 4555, function(){
   console.log('server 4555');
 });
@@ -25,6 +23,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/pets', function(req, res){
+  var petResults = [];
   console.log('URL hit');
   pool.connect( function( err , connection , done ){
     if (err){
@@ -40,8 +39,28 @@ app.get('/pets', function(req, res){
       });
       petData.on( 'end', function(){
         done();
-        res.send(petResults)
+        res.send(petResults);
       });
+    }
+  });
+});
+
+app.post('/pets', function(req, res){
+  console.log(req.body);
+  var data = req.body;
+  var first = data.firstname;
+  var last = data.lastname;
+  pool.connect( function( err , connection , done ){
+    if (err){
+      console.log('error in connection', err);
+      done();
+      res.send( 400 );
+      }
+    else {
+      var ownerInfo = connection.query('INSERT INTO petData (firstName, lastName) Values ("' + first + '", "' + last + '")');
+      console.log(ownerInfo);
+      done();
+      res.send('success');
     }
   });
 });
