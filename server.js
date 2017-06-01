@@ -64,3 +64,25 @@ app.post('/pets', function(req, res){
     }
   });
 });
+
+app.post('/petAdd', function(req, res){
+  console.log(req.body);
+  var data = req.body;
+  var first = data.first;
+  var last = data.last;
+  pool.connect( function( err , connection , done ){
+    if (err){
+      console.log('error in connection', err);
+      done();
+      res.send( 400 );
+      }
+    else {
+      var updateRegistry = connection.query("UPDATE petData SET petname = '" + data.pet + "', " +
+            "breed = '" + data.breed + "', color = '" + data.color + "' WHERE lastname = '" + last +
+            "' AND firstname = '" + first + "';");
+      console.log('Registry Updated');
+      done();
+      res.send('success');
+    }
+    });
+  });
