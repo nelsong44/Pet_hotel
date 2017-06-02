@@ -4,6 +4,8 @@ $(document).ready(function(){
 
     $("#register").on('click', addOwner);
     $("#addPet").on('click', addPet);
+    $("#outPutTable").on('click', '#tdDelete', deleteData);
+    $("#outPutTable").on('click', '#tdUpdate', updatePet);
 });
 
 function getPets(){
@@ -20,7 +22,7 @@ function getPets(){
           alert(owner + ' pet registration needs to be finished');
         }
         else {
-            $('#outPutTable').append('<tr id="' + i + '">' +
+            $('#outPutTable').append('<tr class="new" id="' + i + '">' +
             '<td id="tdOwner"><input type="text" name="Owner" value="' + owner + '" value disabled="disabled"></td>' +
             '<td id="tdPet"><input type="text" name="Pet" value="' + x.petname + '"></td>' +
             '<td id="tdBreed"><input type="text" name="Breed" value="' + x.breed + '"></td>' +
@@ -91,6 +93,46 @@ function addPet(){
       data: petRegisterToSend,
       success: function( response) {
         console.log(response);
+        $('.new').remove();
+        getPets();
       }
     });
+}
+
+function deleteData(){
+  var data = $(this).siblings();
+  console.log(data);
+  var owner = data[0];
+  console.log(owner.innerHTML);
+  var seperate = owner.innerHTML;
+  var after = seperate.split('"');
+  console.log(after);
+  var ownerName = after[5];
+  console.log(ownerName);
+
+  var petName = (data[1].innerHTML).split('"');
+  console.log(petName[5]);
+
+  var deleteToSend = {
+    owner: ownerName,
+    pet: petName[5]
+  };
+  $.ajax({
+    type: 'DELETE',
+    url: '/pet',
+    data: deleteToSend,
+    success: function( response) {
+      console.log(response);
+      $('.new').remove();
+      getPets();
+    }
+  });
+
+}
+
+
+function updatePet(){
+  var data = $(this).siblings();
+  var petName = (data[1].innerHTML).split('"')[5];
+  console.log(petName);
 }

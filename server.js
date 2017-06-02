@@ -86,3 +86,24 @@ app.post('/petAdd', function(req, res){
     }
     });
   });
+
+  app.delete('/pet', function(req, res){
+    pool.connect( function( err , connection , done ){
+      if (err){
+        console.log('error in connection', err);
+        done();
+        res.send( 400 );
+        }
+      else {
+        console.log(req.body);
+        var owner = (req.body.owner).split(' ');
+        console.log(owner);
+        var first = owner[0];
+        var last = owner[1];
+        var pet = req.body.pet;
+        var deleteRegistry = connection.query("DELETE FROM petData WHERE (firstname = '" + first + "') AND" +
+      "(lastname = '" + last + "') AND (petname = '" + pet + "')");
+      res.send('successful delete');
+      }
+  });
+});
