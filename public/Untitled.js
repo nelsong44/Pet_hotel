@@ -1,13 +1,15 @@
 $(document).ready(function(){
     console.log('JQ');
+    // display pet info currently stored in db on page load
     getPets();
-
+    //click events
     $("#register").on('click', addOwner);
     $("#addPet").on('click', addPet);
     $("#outPutTable").on('click', '#tdDelete', deleteData);
     $("#outPutTable").on('click', '#tdUpdate', updatePet);
-});
+}); // end onReady
 
+// function to retrieve and display pet info stored in db on DOM
 function getPets(){
   $.ajax({
     type: 'GET',
@@ -32,8 +34,9 @@ function getPets(){
             '<td id="tdCheck"><button id="in' + i + '" type="button" name="Check">IN</button>' +
             '<button id="out' + i + '" type="button" name="Check">OUT</button></td>' +
             '</tr>');
-          }
-        } //for loop end
+          } // end if statement
+        } // end for loop
+        // display checkin/checkout button depending on current status/ toggle buttons
         for (var k = 0; k < response.length; k++) {
           var y = response[k];
             if (y.checkin === null){
@@ -43,20 +46,22 @@ function getPets(){
             else if (y.checkout === null){
               $('#in' + k).css('display', 'none');
               $('#out' + k).css('display', 'inline');
-        }
-      }
-      }
-    });
-  }
+            } // end if statement
+        } // end for loop
+      } // end success
+    }); // end ajax
+  } // end getPets()
 
+// function to add owner to db and display on DOM
 function addOwner(){
   var first = $('#firstName').val();
   var last = $('#lastName').val();
   var owner = first + ' ' + last;
+  // object to send
   var ownerToPost = {
     firstname: first,
     lastname: last
-  };
+  }; // end object
   console.log(ownerToPost);
   $('#lastName').val('');
   $('#firstName').val('');
@@ -68,11 +73,11 @@ function addOwner(){
     success: function( response ){
       console.log(response);
       $('#ownerSelect').append('<option value="' + owner + '">' + owner + '</option>');
-    }
-  });
-}
+    } // end success
+  }); // end ajax
+} // end addOwner()
 
-
+// function to add new user-input pet info on button click
 function addPet(){
   var owner = $('#ownerSelect').val();
   var petName = $('#pet').val();
@@ -80,13 +85,14 @@ function addPet(){
   var color = $('#color').val();
   var seperate = owner.split(' ');
   console.log(seperate);
+  // object to send
   var petRegisterToSend = {
     first: seperate[0],
     last: seperate[1],
     pet: petName,
     breed: breed,
     color: color
-  };
+  }; // end object
     $.ajax({
       type: 'POST',
       url: '/petAdd',
@@ -95,10 +101,11 @@ function addPet(){
         console.log(response);
         $('.new').remove();
         getPets();
-      }
-    });
-}
+      } // end success
+    }); // end ajax
+} // end add Pet()
 
+// function to delete pet info on button click
 function deleteData(){
   var data = $(this).siblings();
   console.log(data);
@@ -109,14 +116,14 @@ function deleteData(){
   console.log(after);
   var ownerName = after[5];
   console.log(ownerName);
-
   var petName = (data[1].innerHTML).split('"');
   console.log(petName[5]);
 
   var deleteToSend = {
     owner: ownerName,
     pet: petName[5]
-  };
+  }; // end object
+
   $.ajax({
     type: 'DELETE',
     url: '/pet',
@@ -125,14 +132,13 @@ function deleteData(){
       console.log(response);
       $('.new').remove();
       getPets();
-    }
-  });
+    } // end success
+  }); // end ajax
+} // end deleteData
 
-}
-
-
+// function to update pet info on button click
 function updatePet(){
   var data = $(this).siblings();
   var petName = (data[1].innerHTML).split('"')[5];
   console.log(petName);
-}
+} // end updatePet()
